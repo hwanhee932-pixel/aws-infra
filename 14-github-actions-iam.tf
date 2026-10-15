@@ -44,7 +44,11 @@ resource "aws_iam_role" "github_actions" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-            "token.actions.githubusercontent.com:sub" = "repo:hwanhee932-pixel@233664142/aws-msa-platform@1418576681:ref:refs/heads/main"
+
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:hwanhee932-pixel@233664142/aws-msa-platform@1418576681:ref:refs/heads/main",
+              "repo:hwanhee932-pixel@233664142/aws-infra@1420152752:ref:refs/heads/main"
+            ]
           }
         }
       }
