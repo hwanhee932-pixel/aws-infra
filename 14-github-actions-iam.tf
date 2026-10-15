@@ -191,3 +191,37 @@ resource "aws_iam_role_policy_attachment" "github_actions_tfstate" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions_tfstate.arn
 }
+# ============================================================
+# GitHub Actions -> Redis Secret Read Access
+# Terraform plan refresh에 필요
+# ============================================================
+
+resource "aws_iam_policy" "github_actions_secrets_read" {
+  name        = "${var.project}-github-actions-secrets-read"
+  description = "Allow GitHub Actions Terraform CI to read project secrets"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "ReadProjectSecrets"
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+
+        Resource = [
+          "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:${var.project}/redis-*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_secrets_read" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.github_actions_secrets_read.arn
+}
