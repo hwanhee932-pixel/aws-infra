@@ -18,6 +18,12 @@ jobs:
     name: Terraform Validate and Plan
     runs-on: ubuntu-latest
 
+    env:
+      TF_VAR_domain_name: ${{ vars.TF_VAR_domain_name }}
+      TF_VAR_admin_cidrs: ${{ vars.TF_VAR_admin_cidrs }}
+      TF_VAR_admin_role_arn: ${{ vars.TF_VAR_admin_role_arn }}
+      TF_VAR_alert_email: ${{ vars.TF_VAR_alert_email }}
+
     defaults:
       run:
         shell: bash
