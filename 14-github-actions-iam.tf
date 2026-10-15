@@ -137,3 +137,57 @@ output "github_actions_role_arn" {
   description = "IAM Role used by GitHub Actions OIDC"
   value       = aws_iam_role.github_actions.arn
 }
+
+# ============================================================
+# GitHub Actions -> Terraform ReadOnly
+# ============================================================
+
+resource "aws_iam_role_policy_attachment" "github_actions_readonly" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+# ============================================================
+# GitHub Actions -> Terraform S3 State Access
+# ============================================================
+
+resource "aws_iam_policy" "github_actions_tfstate" {
+  name        = "${var.project}-github-actions-tfstate"
+  description = "Allow GitHub Actions to access Terraform remote state"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "ListTerraformStateBucket"
+        Effect = "Allow"
+
+        Action = [
+          "s3:ListBucket"
+        ]
+
+        Resource = "arn:aws:s3:::msa-platform-088923313316-ap-northeast-2-tfstate"
+      },
+      {
+        Sid    = "AccessTerraformState"
+        Effect = "Allow"
+
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+
+        Resource = [
+          "arn:aws:s3:::msa-platform-088923313316-ap-northeast-2-tfstate/aws-infra/terraform.tfstate",
+          "arn:aws:s3:::msa-platform-088923313316-ap-northeast-2-tfstate/aws-infra/terraform.tfstate.tflock"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_tfstate" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.github_actions_tfstate.arn
+}
