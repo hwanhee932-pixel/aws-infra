@@ -13,6 +13,11 @@ permissions:
   id-token: write
   contents: read
 
+# Terraform State를 동시에 여러 Workflow가 사용하지 않도록 제한
+concurrency:
+  group: terraform-aws-infra
+  cancel-in-progress: false
+
 jobs:
   terraform:
     name: Terraform Validate and Plan
