@@ -38,3 +38,8 @@ credentials
 .vscode/
 .DS_Store
 desktop.ini
+
+# Terraform temporary plan/state backup files
+tfplan*
+plan-*.txt
+terraform-state-backup-*.json

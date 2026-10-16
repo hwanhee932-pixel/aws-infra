@@ -4,27 +4,25 @@
 
 # ------------------------------------------------------------
 # IAM Policy
-# Alertmanager가 SNS Topic에 Publish 할 수 있도록 허용
+# Alertmanager가 SNS Topic에 Publish할 수 있도록 허용
 # ------------------------------------------------------------
 resource "aws_iam_policy" "alertmanager_sns" {
-  name = "msa-platform-alertmanager-sns"
+  name = "MSAPlatformAlertmanagerSNSPolicy"
 
   policy = jsonencode({
     Version = "2012-10-17"
 
     Statement = [
       {
-        Effect = "Allow"
-
-        Action = "sns:Publish"
-
+        Effect   = "Allow"
+        Action   = "sns:Publish"
         Resource = aws_sns_topic.alerts.arn
       }
     ]
   })
 
   tags = {
-    Name = "msa-platform-alertmanager-sns"
+    Name = "MSAPlatformAlertmanagerSNSPolicy"
   }
 }
 
@@ -32,10 +30,10 @@ resource "aws_iam_policy" "alertmanager_sns" {
 # ------------------------------------------------------------
 # IAM Role
 # monitoring namespace의 Alertmanager ServiceAccount만
-# 이 Role을 Assume 할 수 있음
+# 이 Role을 Assume할 수 있도록 허용
 # ------------------------------------------------------------
 resource "aws_iam_role" "alertmanager_sns" {
-  name = "msa-platform-alertmanager-sns"
+  name = "MSAPlatformAlertmanagerRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -54,7 +52,7 @@ resource "aws_iam_role" "alertmanager_sns" {
           StringEquals = {
             "${replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}:aud" = "sts.amazonaws.com"
 
-            "${replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:monitoring:monitoring-kube-prometheus-alertmanager"
+            "${replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:monitoring:kube-prometheus-stack-alertmanager"
           }
         }
       }
@@ -62,13 +60,13 @@ resource "aws_iam_role" "alertmanager_sns" {
   })
 
   tags = {
-    Name = "msa-platform-alertmanager-sns"
+    Name = "MSAPlatformAlertmanagerRole"
   }
 }
 
 
 # ------------------------------------------------------------
-# Policy -> Role 연결
+# IAM Policy -> IAM Role 연결
 # ------------------------------------------------------------
 resource "aws_iam_role_policy_attachment" "alertmanager_sns" {
   role       = aws_iam_role.alertmanager_sns.name

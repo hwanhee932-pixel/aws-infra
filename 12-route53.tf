@@ -9,6 +9,12 @@ data "aws_route53_zone" "main" {
   zone_id = "Z0922210QC4AYNQLD8G1"
 }
 
+# ------------------------------------------------------------
+# Current Kubernetes Public ALB
+# ------------------------------------------------------------
+locals {
+  public_alb_dns = "k8s-msaplatformpublic-5d442f2ac3-987232936.ap-northeast-2.elb.amazonaws.com"
+}
 
 # ------------------------------------------------------------
 # API
@@ -20,10 +26,9 @@ resource "aws_route53_record" "api" {
   ttl     = 300
 
   records = [
-    "k8s-msa-public-5999b13c4f-188025152.ap-northeast-2.elb.amazonaws.com"
+    local.public_alb_dns
   ]
 }
-
 
 # ------------------------------------------------------------
 # Frontend
@@ -35,10 +40,9 @@ resource "aws_route53_record" "www" {
   ttl     = 300
 
   records = [
-    "k8s-msa-public-5999b13c4f-188025152.ap-northeast-2.elb.amazonaws.com"
+    local.public_alb_dns
   ]
 }
-
 
 # ------------------------------------------------------------
 # Grafana
@@ -50,6 +54,6 @@ resource "aws_route53_record" "grafana" {
   ttl     = 300
 
   records = [
-    "a2e2df5a4864e4e8bbe849ebf9ad353e-918311987.ap-northeast-2.elb.amazonaws.com"
+    local.public_alb_dns
   ]
 }
