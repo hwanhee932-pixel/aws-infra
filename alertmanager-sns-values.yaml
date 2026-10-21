@@ -3,7 +3,7 @@
     create: true
     name: monitoring-kube-prometheus-alertmanager
     annotations:
-      eks.amazonaws.com/role-arn: arn:aws:iam::088923313316:role/msa-platform-alertmanager-sns
+      eks.amazonaws.com/role-arn: arn:aws:iam::683668078297:role/msa-platform-alertmanager-sns
 
   config:
     global:
@@ -26,7 +26,7 @@
     receivers:
       - name: aws-sns
         sns_configs:
-          - topic_arn: arn:aws:sns:ap-northeast-2:088923313316:msa-platform-alerts
+          - topic_arn: arn:aws:sns:ap-northeast-2:683668078297:msa-platform-alerts
             sigv4:
               region: ap-northeast-2
             subject: "MSA Platform Alert"

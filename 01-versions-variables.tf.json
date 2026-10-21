@@ -4,7 +4,7 @@
 
     "backend": {
       "s3": {
-        "bucket": "msa-platform-088923313316-ap-northeast-2-tfstate",
+        "bucket": "msa-platform-683668078297-ap-northeast-2-tfstate",
         "key": "aws-infra/terraform.tfstate",
         "region": "ap-northeast-2",
         "encrypt": true,
@@ -89,13 +89,13 @@
 
     "node_instance_type": {
       "type": "string",
-      "default": "t3.large",
+      "default": "t3.medium",
       "description": "EC2 instance type for EKS worker nodes"
     },
 
     "db_instance_class": {
       "type": "string",
-      "default": "db.t3.micro",
+      "default": "db.t3.small",
       "description": "RDS instance class"
     },
 

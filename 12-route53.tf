@@ -6,14 +6,14 @@
 # ============================================================
 
 data "aws_route53_zone" "main" {
-  zone_id = "Z0922210QC4AYNQLD8G1"
+  zone_id = "Z01196761PGIK78VV8UBP"
 }
 
 # ------------------------------------------------------------
 # Current Kubernetes Public ALB
 # ------------------------------------------------------------
 locals {
-  public_alb_dns = "k8s-msaplatformpublic-5d442f2ac3-987232936.ap-northeast-2.elb.amazonaws.com"
+  public_alb_dns = " k8s-ingressn-ingressn-7791990f4f-4f346a245a40be30.elb.ap-northeast-2.amazonaws.com"
 }
 
 # ------------------------------------------------------------
