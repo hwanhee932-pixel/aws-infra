@@ -151,3 +151,20 @@ resource "aws_wafv2_web_acl" "main" {
     Project = "msa-platform"
   }
 }
+# ============================================================
+# Find existing ALB created by AWS Load Balancer Controller
+# ============================================================
+
+data "aws_lb" "msa_public" {
+  name = "k8s-msaplatformpublic-5d442f2ac3"
+}
+
+
+# ============================================================
+# Associate WAF with ALB
+# ============================================================
+
+resource "aws_wafv2_web_acl_association" "main" {
+  resource_arn = data.aws_lb.msa_public.arn
+  web_acl_arn  = aws_wafv2_web_acl.main.arn
+}
